@@ -24,6 +24,11 @@ html,body,#root,.App{
 
 textarea:focus, input:focus{
     outline: none;
+    border:1px solid hsl(243, 100%, 62%);
+}
+.error-border{
+    border:1px solid hsl(354, 84%, 57%);
+
 }
 
 input[type="radio"]{
