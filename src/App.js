@@ -1,367 +1,494 @@
 import logo from './logo.svg';
-import { useState } from 'react';
-import { ToggleSwitch } from 'react-dragswitch'
-import 'react-dragswitch/dist/index.css'
 import './App.css';
-import sideImage from "./components/multi-step-form-main/assets/images/bg-sidebar-desktop.svg"
-import Arcade from "./components/multi-step-form-main/assets/images/icon-arcade.svg"
-import Advanced from "./components/multi-step-form-main/assets/images/icon-advanced.svg"
-import Pro from "./components/multi-step-form-main/assets/images/icon-pro.svg"
+import "./Components/CSS/style.css"
+import sidebarDesktop from "./Components/assets/images/bg-sidebar-desktop.svg"
+import advanced from "./Components/assets/images/icon-advanced.svg"
+import arcade from "./Components/assets/images/icon-arcade.svg"
+import pro from "./Components/assets/images/icon-pro.svg"
+import { useState } from 'react';
+import "./Components/fields/ToggleSwitch.css"
 
 function App() {
-  const [tabState, setTabState] = useState(1)
-  const [checked,setCheckedValue] =useState(null)
 
+  const [tab, setTab] = useState(4)
   const [data, setData] = useState({
     name: "",
     email: "",
-    phone: "",
-    plan:""
+    phone: null,
+    plan: "pro",
+    months: true,
+    packages: ""
   })
-
-  const [errors, setErrors] = useState({
+  const [error, setError] = useState({
     name: "",
     email: "",
-    phone: "",
-    plan:""
+    phone: null,
+    plan: "",
+    months: "",
+    packages: ""
   })
+  const [vaildfirst, setVaildFirst] = useState(false)
+  const [vaildsec, setVaildSec] = useState(false)
+  const [vaildThird, setVaildThird] = useState(false)
 
-  const [errorshandle, setErrorshandle] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    plan:""
-  })
-
-
-  const [handle, setHandle] = useState(false)
-  const [handleSecond, setHandleSecond] = useState(false)
-  const [monthYear,setMonthYear] = useState(false)
+  const [add, setAdd] = useState(false)
+  const [packages, setPackages] = useState([
+    { id: 0, name: "Online Services", des: "Access to multiplayers games", price_month: "+$1/mo", price_year: "+$1/ye", value: true },
+    { id: 1, name: "Larger storage", des: "Extra 1TB of cloud save", price_month: "+$2/mo",  price_year: "+$1/ye",value: true },
+    { id: 2, name: "Customizable Profile", des: "Custom theme on your profile", price_month: "+$2/mo", price_year: "+$1/ye", value: true },
+  ])
 
 
-  const handleClick = (e) => {
-    setTabState(e)
+
+  const handleTab = (tabNumb) => {
+    console.log(tabNumb)
+    if (tabNumb === 1) {
+      setTab(1)
+    } else if (tabNumb === 2) {
+      setTab(2)
+    } else if (tabNumb === 3) {
+      setTab(3)
+    } else if (tabNumb === 4) {
+      setTab(4)
+    }
   }
 
-  const [stateMagement, SetstateMagement] = useState()
+  if (vaildfirst === true) {
+    let regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    if (data.name === "" || data.name === undefined) {
+      error.name = "This field is required"
+    } else {
+      error.name = true
+    }
 
-  const handleChange = (e) => {
+    if (data.email === "" || data.email === undefined) {
+      error.email = "Enter the Email"
+    } else if (!regex.test(data.email)) {
+      error.email = "vaild email required"
+    } else {
+      error.email = true
+    }
+
+    if (data.phone === "" || data.phone === undefined || data.phone === null) {
+      error.phone = "This field is required"
+    } else {
+      error.phone = true
+    }
+
+  }
+
+  if (vaildsec === true) {
+    if (data.plan === "" || data.plan === undefined || data.plan === null) {
+      error.plan = "This field is required"
+    } else {
+      error.plan = true
+    }
+
+    data.months = add
+    console.log(add)
+
+    if (data.months === "" || data.months === undefined || data.months === null) {
+      error.months = "This field is required"
+    } else {
+      error.months = true
+    }
+  }
+
+
+  if (vaildThird === true) {
+
+    data.packages = packages
+  }
+
+  const handleChnage = (e) => {
     const { name, value } = e.target;
-    SetstateMagement((prev) => {
-      return {
-        ...prev,
-        [name]: value
-      }
-    })
     setData({
       ...data,
       [name]: value
     })
+    console.log(data)
   }
 
-  if (handle === true) {
-    let regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-    if (stateMagement?.name === undefined) {
-      errors.name = "The Filed is required"
-    } else if (stateMagement.name === "") {
-      errors.name = "The Filed is required"
-    } else {
-      errors.name = true
-    }
 
-    if (stateMagement.email === undefined) {
-      errors.email = "The Field is required"
-    } else if (stateMagement.email === "") {
-      errors.email = "The Filed is required"
-    } else if (!regex.test(stateMagement.email)) {
-      errors.email = "Vaild Mail"
-    } else {
-      errors.email = true
-    }
-
-    if (stateMagement.phone === undefined) {
-      errors.phone = "The Field is required"
-    } else if (stateMagement.phone === "") {
-      errors.phone = "The Field is required"
-    } else if (stateMagement.phone.length > 10 || stateMagement.phone.length < 10) {
-      errors.phone = "Vaild Phone Number"
-    } else {
-      errors.phone = true
-    }
-  }
-
-  if(handleSecond===true){
-    if (stateMagement.plan === undefined) {
-      errors.plan = "The Field is required"
-    } else if (stateMagement.plan === "") {
-      errors.plan = "The Field is required"
-    } else {
-      errors.plan = true
-    }
-  }
-  const handleSubmitSecond = (e) =>{
+  const handleNext = (e, next) => {
     e.preventDefault();
-    setHandleSecond(true)
-    if(errors.plan===true){
-      setTabState(3)
+    if (next === 1) {
+      setVaildFirst(true)
+      if (error.name === true && error.email && error.phone) {
+        setTab(2)
+      }
+    } else if (next === 2) {
+      setVaildSec(true)
+      console.log(data)
+    }
+    else if (next === 3) {
+      setVaildThird(true)
+      console.log(data)
     }
   }
 
-  const handleClickMY = () =>{
-    setMonthYear(!monthYear)
+
+
+
+
+  const handlePackage = (v, i) => {
+    packages?.forEach((el) => {
+      if (v.id === el.id) {
+        el.value = !el.value
+      }
+    })
+    setPackages(packages)
+    console.log(packages)
+
   }
 
-  const setChecked = (e)=>{
-    // console.log(e.target.value)
-    // setCheckedValue(!checked)
-  }
 
-  const handleSubmitFirst = (e) => {
-    e.preventDefault();
-    setHandle(true)
-    console.log(data, errors)
-    if (errors.phone === true && errors.email === true && errors.name === true) {
-      setTabState(2)
-    }
-   
-    handleChange(e)
-  }
 
   return (
     <div className="App">
-      <div className=' bg-white'>
-        <div className='grid grid-cols-12 p-4'>
-          <div className=' col-span-3'>
-
-            <div className='relative'>
-              <img src={sideImage} alt="Side Image" className='' />
-              <div className='absolute top-0'>
-                <div onClick={() => handleClick(1)}>
-                  STEP 1
+      <div className=' container h-full '>
+        <div className=' grid h-full  grid-cols-4'>
+          <div className=' h-full'>
+            <div className=' relative h-full'>
+              <div className=' absolute top-[10%]'>
+                <div className=' grid grid-cols-4 py-4 px-10' onClick={() => handleTab(1)}>
+                  <div className=' px-2'>
+                    <div className=' h-[36px] rounded-[50%] text-white border-white w-[36px] border  flex justify-center items-center'>
+                      1
+                    </div>
+                  </div>
+                  <div className=' col-span-3 px-2'>
+                    <div className=' text-left text-sm text-pastel-blue font-thin '>STEP 1</div>
+                    <div className=' text-left leading-[16px] text-white font-semibold tracking-widest'>YOUR INFO</div>
+                  </div>
+                </div>
+                <div className=' grid grid-cols-4 py-4 px-10' onClick={() => handleTab(1)}>
+                  <div className=' px-2'>
+                    <div className=' h-[36px] rounded-[50%] text-white border-white w-[36px] border  flex justify-center items-center'>
+                      1
+                    </div>
+                  </div>
+                  <div className=' col-span-3 px-2'>
+                    <div className=' text-left text-sm text-pastel-blue font-thin '>STEP 1</div>
+                    <div className=' text-left leading-[16px] text-white font-semibold tracking-widest'>YOUR INFO</div>
+                  </div>
+                </div>
+                <div className=' grid grid-cols-4 py-4 px-10' onClick={() => handleTab(3)}>
+                  <div className=' px-2'>
+                    <div className=' h-[36px] rounded-[50%] text-white border-white w-[36px] border  flex justify-center items-center'>
+                      1
+                    </div>
+                  </div>
+                  <div className=' col-span-3 px-2'>
+                    <div className=' text-left text-sm text-pastel-blue font-thin '>STEP 3</div>
+                    <div className=' text-left leading-[16px] text-white font-semibold tracking-widest'>YOUR INFO</div>
+                  </div>
+                </div>
+                <div className=' grid grid-cols-4 py-4 px-10' onClick={() => handleTab(4)}>
+                  <div className=' px-2'>
+                    <div className=' h-[36px] rounded-[50%] text-white border-white w-[36px] border  flex justify-center items-center'>
+                      1
+                    </div>
+                  </div>
+                  <div className=' col-span-3 px-2'>
+                    <div className=' text-left text-sm text-pastel-blue font-thin '>STEP 4</div>
+                    <div className=' text-left leading-[16px] text-white font-semibold tracking-widest'>YOUR INFO</div>
+                  </div>
                 </div>
 
-                <div onClick={() => handleClick(2)}>
-                  STEP 2
-                </div>
-
-                <div onClick={() => handleClick(3)}>
-                  STEP 3
-                </div>
-
-                <div onClick={() => handleClick(4)}>
-                  STEP 4
-                </div>
+             
               </div>
 
+              <img src={sidebarDesktop} alt="sidebarDesktop" className='  h-full' />
             </div>
-
           </div>
-          <div className=' col-span-9  py-10'>
-            <div className='px-16 w-[80%] mx-auto'>
+          <div className=' col-span-3 py-16 px-16'>
+            <div className=' px-16'>
+              <div className=' flex'>
+                <div className=' h-[50px] w-[50px] mx-2 bg-marine-blue'>
 
+                </div>
+                <div className=' h-[50px] w-[50px] mx-2 bg-purplish-blue'>
 
-              {tabState === 1 ?
-                <div>
-                  <form>
-                    <h1 className=' text-marine-blue text-[32px] tracking-wider font-semibold'>Personal Info</h1>
-                    <p className=' text-light-gray'>Please Provide your name, email address, and phone number</p>
-                    <div className='py-10'>
-                      <div className='pb-2'>
-                        <div className='flex w-[100%]'>
-                          <div className='w-[50%] flex justify-start'>
-                            <p className=' text-marine-blue py-1'>
-                              Name
-                            </p>
-                          </div>
-                          <div className='w-[50%] flex justify-end'>
-                            <p className='text-[#8b0000] text-[14px] pt-2'>
-                              {errors.name}
-                            </p>
+                </div>
+                <div className=' h-[50px] w-[50px] mx-2 bg-pastel-blue'>
 
-                          </div>
-                        </div>
-                        <input type='text'
-                          placeholder='Name'
-                          name="name"
-                          value={data.name}
-                          id="name"
-                          onChange={(e) => handleChange(e)}
-                          className='border text-[18px] text-marine-blue placeholder:text-light-gray w-[100%] py-4 px-4 rounded-md' />
+                </div>
+                <div className=' h-[50px] w-[50px] mx-2 bg-light-blue'>
 
-                      </div>
-                      <div className='pb-2'>
-                        <div className='flex w-[100%]'>
-                          <div className='w-[50%] flex justify-start'>
-                            <p className=' text-marine-blue py-1'>
-                              Email Address
-                            </p>
-                          </div>
-                          <div className='w-[50%] flex justify-end'>
-                            <p className='text-[#8b0000] text-[14px] pt-2'>
-                              {errors.email}
-                            </p>
-                          </div>
-                        </div>
-                        <input type='text'
-                          placeholder='Email'
-                          id="email"
-                          name="email"
-                          value={data.email}
-                          onChange={(e) => handleChange(e)}
-                          className='border text-marine-blue placeholder:text-light-gray w-[100%] py-4 px-4 rounded-md' />
+                </div>
+                <div className=' h-[50px] w-[50px] mx-2 bg-strawberry-red'>
 
-                      </div>
-                      <div className='pb-2'>
-                        <div className='flex w-[100%]'>
-                          <div className='w-[50%] flex justify-start'>
-                            <p className=' text-marine-blue py-1'>
-                              Phone
-                            </p>
-                          </div>
-                          <div className='w-[50%] flex justify-end'>
-                            <p className='text-[#8b0000] text-[14px] pt-2'>
-                              {errors.phone}
-                            </p>
-                          </div>
-                        </div>
-                        <input type='number'
-                          placeholder='phone'
-                          id="phone"
-                          value={data.phone}
-                          name="phone"
-                          onChange={(e) => handleChange(e)}
-                          className='border text-marine-blue placeholder:text-light-gray w-[100%] py-4 px-4 rounded-md' />
+                </div>
+                <div className=' h-[50px] w-[50px] mx-2 bg-light-gray'>
 
-                      </div>
-                    </div>
-                    <div className='grid grid-cols-3'>
-                      <div className=' col-span-2'>
+                </div>
+                <div className=' h-[50px] w-[50px] mx-2 bg-magnolia'>
 
-                      </div>
-                      <div className=' col-span-1 flex justify-end'>
-                        <button onClick={(e) => handleSubmitFirst(e)} className='hover:bg-pastel-blue bg-marine-blue py-2 px-8 rounded-md text-white'>Next Step</button>
-                      </div>
-                    </div>
-                  </form>
+                </div>
+                <div className=' h-[50px] w-[50px] mx-2 bg-alabaster'>
 
                 </div>
 
+              </div>
 
 
 
-                : null}
-              {tabState === 2 ? <div>
+
+              {tab === 1 ? <div>Tab 1
+                <h1 className='text-left text-[26px] font-semibold text-marine-blue'>Personal info</h1>
+                <p className=' text-light-gray text-[18px] text-left pt-1'>Please provide your name, email address and phone number</p>
+                <form>
+                  <div className=' pb-2'>
+                    <div className=' grid grid-cols-2 py-2'>
+                      <div className=' flex'>
+                        <label className=' flex text-marine-blue  text-base'>Name </label>
+                      </div>
+                      <div className=' flex text-strawberry-red heading justify-end'>
+                        {error.name}
+                      </div>
+                    </div>
+                    <input type="text" placeholder='e.g. Stephen King' name="name" id="name" className=' placeholder:text-light-gray  text-marine-blue  border w-full rounded-[6px] border-marine-blue py-3 px-4' onChange={(e) => handleChnage(e)} />
+                  </div>
+
+                  <div className=' pb-2' >
+                    <div className=' grid grid-cols-2 py-2'>
+                      <div className=' flex'>
+                        <label className=' flex text-marine-blue  text-base'>Email </label>
+                      </div>
+                      <div className=' flex text-strawberry-red heading justify-end'>
+                        {error.email}
+                      </div>
+                    </div>
+                    <input type="text" placeholder='e.g. stephenking@lorem.com' name="email" id="email" className=' placeholder:text-light-gray  text-marine-blue  border w-full rounded-[6px] border-marine-blue py-3 px-4' onChange={(e) => handleChnage(e)} />
+                  </div>
+
+                  <div className=' pb-2' >
+                    <div className=' grid grid-cols-2 py-2'>
+                      <div className=' flex'>
+                        <label className=' flex text-marine-blue  text-base'>Phone </label>
+                      </div>
+                      <div className=' flex text-strawberry-red heading justify-end'>
+                        {error.phone}
+                      </div>
+                    </div>
+                    <input type="number" placeholder='e.g. +1 234 567 890' name="phone" id="phone" className=' placeholder:text-light-gray  text-marine-blue  border w-full rounded-[6px] border-marine-blue py-3 px-4' onChange={(e) => handleChnage(e)} />
+                  </div>
+
+                  <div className=' flex justify-end'>
+
+                    <button className=' bg-marine-blue text-white px-8 py-2 rounded-[6px]' onClick={(e) => handleNext(e, 1)}>Next</button>
+                  </div>
+                </form>
+
+              </div> : null}
+              {tab === 2 ? <div>Tab 2
+
+                <h1 className='text-left text-[26px] font-semibold text-marine-blue'>Select your plan</h1>
+                <p className=' text-light-gray text-[18px] text-left pt-1'>you have the option of monthly or yearly billing</p>
 
                 <form>
-                  <h1 className=' text-marine-blue text-[32px] tracking-wider font-semibold'>Select your plan</h1>
-                  <p className=' text-light-gray'>you have the option of monthly or yearly billing.</p>
+                  <div className=' grid grid-cols-3 gap-6'>
+                    <div className={` ${data.plan === "arcade" ? " border border-purplish-blue" : "border border-light-gray "} cursor-pointer duration-300  py-4 px-3 rounded-[6px] `}>
+                      <label className='cursor-pointer'>
+                        <img src={arcade} alt="arcade" />
+                        <div className=' '>
+                          <input type='radio' name="plan" id="arcade" value="arcade" onChange={(e) => handleChnage(e)} />
+                          <p className=' text-marine-blue font-semibold text-left'>Arcade</p>
+                          <p className=' text-light-gray text-left'>$9/mon</p>
+                          <p className={`    ${data.plan.length === 0 ? "hidden" : " visible "} text-marine-blue text-sm pt-1 text-left`}>2 months free</p>
+                        </div>
 
-                  <div className='grid grid-cols-3 gap-6 py-10 pb-4'>
-
-                    <label className={`${data.plan === "arcade" ? "activeBorder " :"" } border hover:activeBorder rounded-md cursor-pointer`}>
-                      <div className=' px-4 p-4 '>
-                        <input type="radio" className='' value="arcade" onChange={(e)=>handleChange(e)} id="arcade" name="plan" />
-                        <img src={Arcade} alt="Arcade" className='pb-10' />
-                        <p className='text-marine-blue font-semibold'>
-                          Arcade
-                        </p>
-                        <p className=' text-light-gray'>
-                          $9/mo
-                        </p>
-                      </div>
-                    </label>
-
-                    <label className={`${data.plan === "advanced" ? "activeBorder " :"" } border hover:activeBorder rounded-md cursor-pointer`}>
-                    <div className='border rounded-md px-4 p-4'>
-                    <input type="radio" className='' value="advanced" id="arcade"  onChange={(e)=>handleChange(e)} name="plan" />
-                      <img src={Advanced} alt="Advanced" className='pb-10' />
-                      <p className='text-marine-blue font-semibold'>
-                        Advance
-                      </p>
-                      <p className=' text-light-gray'>
-                        $9/mo
-                      </p>
-                    </div>   
-                    </label>
-
-               
-                    <label className={`${data.plan === "pro" ? "activeBorder" :"" } border group-hover:activeBorder rounded-md cursor-pointer`}>
-                    <div className='border rounded-md px-4 p-4 group'>
-                    <input type="radio" className='pro'  value="pro" id="arcade"  onChange={(e)=>handleChange(e)}  name="plan" />
-                      <img src={Pro} alt="Pro" className='pb-10' />
-                      <p className='text-marine-blue font-semibold'>
-                        Pro
-                      </p>
-                      <p className=' text-light-gray'>
-                        $15/mo
-                      </p>
+                      </label>
                     </div>
-                    </label>
+                    <div className={` ${data.plan === "advanced" ? " border border-purplish-blue" : "border border-light-gray "} cursor-pointer duration-300  py-4 px-3 rounded-[6px] `}>
+                      <label className='cursor-pointer'>
+                        <img src={advanced} alt="advanced" />
+                        <div className=' '>
+                          <input type='radio' name="plan" id="advanced" value="advanced" onChange={(e) => handleChnage(e)} />
+                          <p className=' text-marine-blue font-semibold text-left'>Advanced</p>
+                          <p className=' text-light-gray text-left'>$9/mon</p>
+                          <p className={`    ${data.plan.length === 0 ? "hidden" : " visible "} text-marine-blue text-sm pt-1 text-left`}>2 months free</p>
 
+                        </div>
 
-        
+                      </label>
+                    </div>
+                    <div className={` ${data.plan === "pro" ? " border border-purplish-blue" : "border border-light-gray "} cursor-pointer duration-300 py-4 px-3 rounded-[6px] `}>
+                      <label className='cursor-pointer'>
+                        <img src={pro} alt="pro" />
+                        <div className=' '>
+                          <input type='radio' name="plan" id="pro" value="pro" onChange={(e) => handleChnage(e)} />
+                          <p className=' text-marine-blue font-semibold text-left'>Pro</p>
+                          <p className=' text-light-gray text-left'>$9/mon</p>
 
+                          <p className={`    ${data.plan.length === 0 ? "hidden" : " visible "} text-marine-blue text-sm pt-1 text-left`}>2 months free</p>
+                        </div>
+
+                      </label>
+                    </div>
                   </div>
-                  <div onClick={()=>handleClickMY()}>
-                      <div>
-                        <div className='bg-marine-blue w-[40px] h-[20px] rounded-md relative'>
-                        {/* {} */}
-                        <div className={` ${monthYear ? "animation-left-moving left-1 bg-white absolute" :"animation-right-moving right-1 bg-[#fff] absolute" }   h-[10px] w-[10px]  borderRadius`}>
-
-                        </div>
-                        
-                        {/* <div className="absolute animation-right-moving right-1 h-[10px] w-[10px] bg-white borderRadius">
-
-                        </div> */}
-                        {/* {monthYear ?"Hello":"Bye"} */}
-
-                        </div>
-                      </div>
+                  <p className='text-strawberry-red heading justify-end'> {error.plan}</p>
+                  <div>
                   </div>
-                  <div className='flex w-[100%] pb-10'>
-                          <div className='w-[50%] flex justify-start'>
-                            <p className=' text-marine-blue py-1'>
-                              
-                            </p>
-                          </div>
-                          <div className='w-[50%] flex justify-end'>
-                            <p className='text-[#8b0000] text-[14px] pt-2'>
-                              {errors.plan}
-                            </p>
 
-                          </div>
-                        </div>
+                  <div className=' flex justify-center my-2 pt-6'>
 
-                  
-                  {/* {errors.plan} */}
 
-                  <div className='grid grid-cols-3'>
-                      <div className=' col-span-2'>
 
-                      <label class="switch">
-  <input type="checkbox" checked/>
-  <span class="slider round"></span>
-</label>
+                    <p className={`${add ? "text-marine-blue " : " text-light-gray"}  font-semibold pt-0.5 mx-2 duration-300`}> Monthly </p>
 
-                      </div>
-                      <div className=' col-span-1 flex justify-end'>
-                        <button onClick={(e) => handleSubmitSecond(e)} className='hover:bg-pastel-blue bg-marine-blue py-2 px-8 rounded-md text-white'>Next Step</button>
+                    <div className="toggle-switch" >
+                      <input type="checkbox" onClick={() => setAdd(!add)} className="checkbox"
+                        name={"toogle"} id={"label"} />
+                      <label className="label" htmlFor={"label"}>
+                        <span className="inner" />
+                        <span className="switch" />
+                      </label>
+                    </div>
+
+                    <p className={`${add ? "text-light-gray " : "  text-marine-blue"}   font-semibold pt-0.5 mx-2 duration-300`}> Yearly </p>
+                  </div>
+
+
+                  <div className=' grid grid-cols-2'>
+                    <div className="flex ">
+                      <div className=' text-light-gray'>
+                        Go Back
                       </div>
                     </div>
+                    <div className=' flex justify-end'>
+                      <button className=' bg-marine-blue text-white px-8 py-2 rounded-[6px]' onClick={(e) => handleNext(e, 2)}>Next</button>
+                    </div>
+
+                  </div>
+
 
                 </form>
               </div> : null}
 
-              {tabState === 3 ? <p>State 3</p> : null}
+              {tab === 3 ? <div>
 
-              {tabState === 4 ? <p>State 4</p> : null}
+
+
+
+                <h1 className='text-left text-[26px] font-semibold text-marine-blue'>Pick add-ons</h1>
+                <p className=' text-light-gray text-[18px] text-left pt-1'>Add-ons help enchance your gaming experience</p>
+
+
+                {packages?.map((v, i) => {
+                  return (
+                    <div className={`border border-light-gray rounded-[6px] py-6 cursor-pointer mb-4`}>
+                      <label className={` cursor-pointer `}>
+                        <div className=' grid grid-cols-6'>
+                          <div className=' my-4'>
+                            <input type="checkbox" className='largerCheckbox' onClick={() => handlePackage(v, i)} id={v?.name} name={v?.name} value={v?.value} />
+                          </div>
+                          <div className=' col-span-4 pt-1'>
+                            <div className=' text-left text-marine-blue font-semibold'>
+                              {v?.name}
+                            </div>
+                            <div className=' text-light-gray  text-left'>
+                              {v?.des}
+                            </div>
+                          </div>
+                          <div className=' text-purplish-blue my-4'>
+                            {v?.price}
+                          </div>
+                        </div>
+                        <div>
+                        </div>
+                      </label>
+                    </div>
+                  )
+                })}
+
+
+                <p className='text-strawberry-red heading justify-end'>  {error.package}</p>
+
+
+                <div className=' grid grid-cols-2'>
+                  <div className="flex ">
+                    <div className=' text-light-gray'>
+                      Go Back
+                    </div>
+                  </div>
+                  <div className=' flex justify-end'>
+                    <button className=' bg-marine-blue text-white px-8 py-2 rounded-[6px]' onClick={(e) => handleNext(e, 3)}>Next</button>
+                  </div>
+                </div>
+              </div> : null}
+
+              {tab === 4 ? <div>
+                <h1 className='text-left text-[26px] font-semibold text-marine-blue'>Finishing up</h1>
+                <p className=' text-light-gray text-[18px] text-left pt-1'>Double-check everything looks OK before confirming</p>
+
+                <div className=' grid grid-cols-2'>
+                  <div>
+                    {data.plan==="pro" ? <div className='text-left text-marine-blue font-semibold'>   Pro  {data.months ? <span className='text-left text-marine-blue font-semibold'>(Yearly) </span>:<span className='text-left text-marine-blue font-semibold'> (Monthly)</span>} </div> :null}
+                    {data.plan==="advanced" ? <div className='text-left text-marine-blue font-semibold'>   Advanced   {data.months ? <span className='text-left text-marine-blue font-semibold'>(Yearly) </span>:<span className='text-left text-marine-blue font-semibold'> (Monthly)</span>}</div> :null}
+                    {data.plan==="arcade" ? <div className='text-left text-marine-blue font-semibold'>   Arcade   {data.months ? <span className='text-left text-marine-blue font-semibold'>(Yearly) </span>:<span className='text-left text-marine-blue font-semibold'> (Monthly)</span>}</div> :null}
+                    
+                  </div>
+                  <div>
+                    <div className='text-right text-marine-blue font-semibold'>$9<sapn>{data.months ? <span>/ye</span>:<span> /mo</span>}</sapn></div>
+                  </div>
+                </div>
+
+
+
+                <div className=' grid grid-cols-2'>
+                  {packages?.map((v, i) => {
+                    return (
+                      <>
+                        <div>
+                          {v?.value === true ? <div className='text-left text-light-gray '>{v?.name} </div> : null}
+                        </div>
+                        <div>
+                          {v?.value === true ? <> {data.months ? <><div className='text-right text-marine-blue font-semibold'>{v?.price_year} </div></> :<><div className='text-right text-marine-blue font-semibold'>{v?.price_month} </div></>}</>  : null}
+                        </div>
+                      </>
+                    )
+                  })}
+                  <div>
+
+
+
+
+
+                  </div>
+                  <div>
+                    <div className='text-right text-marine-blue font-semibold'>$9/mo</div>
+                  </div>
+                </div>
+
+
+
+
+
+                <div className=' grid grid-cols-2'>
+                  <div className="flex ">
+                    <div className=' text-light-gray'>
+                      Go Back
+                    </div>
+                  </div>
+                  <div className=' flex justify-end'>
+                    <button className=' bg-marine-blue text-white px-8 py-2 rounded-[6px]' onClick={(e) => handleNext(e, 3)}>Next</button>
+                  </div>
+                </div>
+
+              </div> : null}
+
 
 
             </div>
-
           </div>
+
         </div>
+
       </div>
+
+
     </div>
   );
 }

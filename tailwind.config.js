@@ -5,20 +5,22 @@ module.exports = {
   ],
   theme: {
     screens: {
-      'sm': { 'max': '766px' },
-      // => @media (min-width: 640px) { ... }
-      'mdsm': '641px',
-      // => @media (min-width: 768px) { ... }
-      'md': '768px',
-      // => @media (min-width: 768px) { ... }
-      'lgmd': '1200px',
-      // => @media (min-width: 1024px) { ... }
-      'lg': '1201px',
-      // => @media (min-width: 1024px) { ... }
-      'xl': '1280px',
-      // => @media (min-width: 1280px) { ... }
-      '2xl': '1536px',
+      sm: { min: "0px", max: "640px" }, // mobile view 
+      smmd: { min: "641px", max: "767px" }, // small tablets
+      // => @media (min-width: 640px and max-width: 767px) { ... }
+
+      md: { min: "768px", max: "1023px" }, // ipad view 
+      // => @media (min-width: 768px and max-width: 1023px) { ... }
+
+      lg: { min: "1024px", max: "1279px" }, // laptop
+      // => @media (min-width: 1024px and max-width: 1279px) { ... }
+
+      xl: { min: "1280px", max: "1440px" }, //  desktop
+      // => @media (min-width: 1280px and max-width: 1535px) { ... }
+
+      "2xl": { min: "1441px", max: "1536px" }, // large desktop
       // => @media (min-width: 1536px) { ... }
+      "3xl": "1537  px", // 4k screen 
     },
     fontSize: {
       'sm': '14px',
