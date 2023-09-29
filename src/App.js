@@ -1,5 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
+import './Components/CSS/responsive.css';
+
 import "./Components/CSS/style.css"
 import sidebarDesktop from "./Components/assets/images/bg-sidebar-desktop.svg"
 import advanced from "./Components/assets/images/icon-advanced.svg"
@@ -10,7 +12,7 @@ import "./Components/fields/ToggleSwitch.css"
 
 function App() {
 
-  const [tab, setTab] = useState(2)
+  const [tab, setTab] = useState(1)
   const [data, setData] = useState({
     name: "",
     email: "",
@@ -109,29 +111,32 @@ function App() {
     console.log(data)
   }
 
-const [key,setKey] = useState([
-  {id:0,key:false,step:"STEP 1"},
-  {id:0,key:true},
-  {id:0,key:true},
-  {id:0,key:true},
-])
+  const [firstkey, setFirstKeys] = useState(false)
+  const [secondkey, setSecondKeys] = useState(false)
+  const [thirdkey, setThirdKeys] = useState(false)
+  const [fourthkey, setFourthKeys] = useState(false)
+  const [fivthkey, setFivthKeys] = useState(false)
+
   const handleNext = (e, next) => {
     e.preventDefault();
     if (next === 1) {
       setVaildFirst(true)
       if (error.name === true && error.email && error.phone) {
         setTab(2)
+        setFirstKeys(true)
       }
     } else if (next === 2) {
       setVaildSec(true)
-      if(error.plan===true){
+      if (error.plan === true) {
         setTab(3)
+        setSecondKeys(true)
       }
       console.log(data)
     }
     else if (next === 3) {
       setVaildThird(true)
       setTab(4)
+      setThirdKeys(true)
 
       console.log(data)
     }
@@ -158,12 +163,12 @@ const [key,setKey] = useState([
 
   return (
     <div className="App">
-      <div className=' container h-full '>
-        <div className=' grid h-full  grid-cols-4 py-4'>
+      <div className=' container mx-auto sm:mx-[0px] h-full '>
+        <div className=' grid h-full sm:block grid-cols-4 py-4'>
           <div className=' h-full'>
             <div className=' relative h-full'>
-              <div className=' absolute top-[10%]'>
-                <div className=' grid grid-cols-4 py-4 px-10' onClick={() => handleTab(1)}>
+              <div className=' absolute sm:relative sm:top-0 top-[10%]'>
+                <div className=' grid grid-cols-4 py-4 px-10 sm:grid-cols-1 sm:px-0 ' onClick={() => handleTab(1)}>
                   <div className=' px-2'>
                     <div className={`${tab === 1 ? "bg-pastel-blue text-marine-blue" : "text-white"} h-[36px] rounded-[50%]  border-white w-[36px] border  flex justify-center items-center`}>
                       1
@@ -174,7 +179,7 @@ const [key,setKey] = useState([
                     <div className=' text-left leading-[16px] text-white font-semibold tracking-widest'>YOUR INFO</div>
                   </div>
                 </div>
-                <button disabled="" className=' grid grid-cols-4 py-4 px-10' onClick={() => handleTab(2)}>
+                <button disabled={firstkey ? false : false} className=' grid grid-cols-4 py-4 px-10  sm:grid-cols-1 sm:px-0 ' onClick={() => handleTab(2)}>
                   <div className=' px-2'>
                     <div className={`${tab === 2 ? "bg-pastel-blue text-marine-blue" : "text-white"} h-[36px] rounded-[50%]  border-white w-[36px] border  flex justify-center items-center`}>
                       2
@@ -185,18 +190,18 @@ const [key,setKey] = useState([
                     <div className=' text-left leading-[16px] text-white font-semibold tracking-widest'>SELECT PLAN</div>
                   </div>
                 </button>
-                <div className=' grid grid-cols-4 py-4 px-10' onClick={() => handleTab(3)}>
+                <div className=' grid grid-cols-4 py-4 px-10  sm:grid-cols-1 sm:px-0 ' onClick={() => handleTab(3)}>
                   <div className=' px-2'>
                     <div className={` ${tab === 3 ? "bg-pastel-blue text-marine-blue" : "text-white"} h-[36px] rounded-[50%]  border-white w-[36px] border  flex justify-center items-center`}>
                       3
                     </div>
                   </div>
-                  <div className=' col-span-3 px-2'>
+                  <div className=' col-span-3 px-2 '>
                     <div className=' text-left text-sm text-pastel-blue font-thin '>STEP 3</div>
                     <div className=' text-left leading-[16px] text-white font-semibold tracking-widest'>ADD-ONS</div>
                   </div>
                 </div>
-                <div className=' grid grid-cols-4 py-4 px-10' onClick={() => handleTab(4)}>
+                <div className=' grid grid-cols-4 py-4 px-10  sm:grid-cols-1 sm:px-0 ' onClick={() => handleTab(4)}>
                   <div className=' px-2'>
                     <div className={`${tab === 4 ? "bg-pastel-blue text-marine-blue" : "text-white"} h-[36px] rounded-[50%]  border-white w-[36px] border  flex justify-center items-center`}>
                       4
@@ -211,11 +216,11 @@ const [key,setKey] = useState([
 
               </div>
 
-              <img src={sidebarDesktop} alt="sidebarDesktop" className='  h-full' />
+              <img src={sidebarDesktop} alt="sidebarDesktop" className='sm:absolute top-0  h-full' />
             </div>
           </div>
-          <div className=' col-span-3 py-16 px-16'>
-            <div className=' px-16'>
+          <div className=' col-span-3 py-16 px-16 h-full sm:px-0 sm:col-span-1 sm:py-0 '>
+            <div className=' mx-16 sm:mx-0 h-full relative'>
               {/* <div className=' flex'>
                 <div className=' h-[50px] w-[50px] mx-2 bg-marine-blue'>
 
@@ -247,10 +252,10 @@ const [key,setKey] = useState([
 
 
 
-              {tab === 1 ? <div>
+              {tab === 1 ? <div className=' h-full'>
                 <h1 className='text-left text-[26px] font-semibold text-marine-blue'>Personal info</h1>
                 <p className=' text-light-gray text-[18px] text-left pt-1'>Please provide your name, email address and phone number</p>
-                <form className=' py-6'>
+                <form className=' py-10'>
                   <div className=' pb-2'>
                     <div className=' grid grid-cols-2 py-2'>
                       <div className=' flex'>
@@ -260,7 +265,7 @@ const [key,setKey] = useState([
                         {error.name}
                       </div>
                     </div>
-                    <input type="text" placeholder='e.g. Stephen King' name="name" id="name" className={` ${error.name.length !== 0 ? ` ${error.name !== true ? "border-strawberry-red " : ""}   ` : "border-light-gray"}  placeholder:text-light-gray  text-marine-blue  border w-full rounded-[6px] py-3 px-4`} onChange={(e) => handleChnage(e)} />
+                    <input type="text" value={data.name} placeholder='e.g. Stephen King' name="name" id="name" className={` ${error.name.length !== 0 ? ` ${error.name !== true ? "border-strawberry-red " : ""}   ` : "border-light-gray"}  placeholder:text-light-gray  text-marine-blue  border w-full rounded-[6px] py-3 px-4`} onChange={(e) => handleChnage(e)} />
                   </div>
 
                   <div className=' pb-2' >
@@ -272,7 +277,7 @@ const [key,setKey] = useState([
                         {error.email}
                       </div>
                     </div>
-                    <input type="text" placeholder='e.g. stephenking@lorem.com' name="email" id="email" className={`
+                    <input type="text" value={data.email} placeholder='e.g. stephenking@lorem.com' name="email" id="email" className={`
                     ${error.email.length !== 0 ? ` ${error.email !== true ? "border-strawberry-red " : ""}   ` : "border-light-gray"} placeholder:text-light-gray  text-marine-blue  border w-full rounded-[6px]  py-3 px-4`} onChange={(e) => handleChnage(e)} />
                   </div>
 
@@ -285,12 +290,12 @@ const [key,setKey] = useState([
                         {error.phone}
                       </div>
                     </div>
-                    <input type="number" placeholder='e.g. +1 234 567 890' name="phone" id="phone" className={` ${error.phone !== null ? ` ${error.phone !== true ? "border-strawberry-red " : ""}   ` : "border-light-gray "} placeholder:text-light-gray  text-marine-blue  border w-full rounded-[6px] py-3 px-4`} onChange={(e) => handleChnage(e)} />
+                    <input type="number" value={data.phone} placeholder='e.g. +1 234 567 890' name="phone" id="phone" className={` ${error.phone !== null ? ` ${error.phone !== true ? "border-strawberry-red " : ""}   ` : "border-light-gray "} placeholder:text-light-gray  text-marine-blue  border w-full rounded-[6px] py-3 px-4`} onChange={(e) => handleChnage(e)} />
                   </div>
 
-                  <div className='pt-10 flex justify-end'>
+                  <div className='pt-10 flex absolute bottom-0 right-0 justify-end'>
 
-                    <button className=' bg-marine-blue text-white px-8 py-2 rounded-[6px]' onClick={(e) => handleNext(e, 1)}>Next</button>
+                    <button className=' hover:bg-pastel-blue duration-300  bg-marine-blue text-white px-8 py-2 rounded-[6px]' onClick={(e) => handleNext(e, 1)}>Next</button>
                   </div>
                 </form>
 
@@ -300,7 +305,7 @@ const [key,setKey] = useState([
                 <h1 className='text-left text-[26px] font-semibold text-marine-blue'>Select your plan</h1>
                 <p className=' text-light-gray text-[18px] text-left pt-1'>you have the option of monthly or yearly billing</p>
 
-                <form className=' py-8'>
+                <form className=' py-12'>
                   <div className=' grid grid-cols-3 gap-6'>
                     <div className={` ${data.plan === "arcade" ? " border border-purplish-blue" : "border border-light-gray "} cursor-pointer duration-300  py-4 px-3 rounded-[6px] `}>
                       <label className='cursor-pointer'>
@@ -352,25 +357,24 @@ const [key,setKey] = useState([
                       <input type="checkbox" onClick={() => setAdd(!add)} className="checkbox"
                         name={"toogle"} id={"label"} />
                       <label className="label" htmlFor={"label"}>
-                        <span className={` ${data.months===null ? "" :""  } inner  `} />
-                        <span className={` ${add === true? `right-[0px]  `: " right-[20px]"} switch`} />
+                        <span className={` ${data.months === null ? "" : ""} inner  `} />
+                        <span className={` ${add === true ? `right-[0px]  ` : " right-[20px]"} switch`} />
                       </label>
                     </div>
 
                     <p className={`${add ? "text-marine-blue  " : "  text-light-gray"}   font-semibold pt-0.5 mx-2 duration-300`}> Yearly </p>
                   </div>
 
-                  {add===true ?<p>year</p>:<p>mon</p>}
 
 
-                  <div className=' grid grid-cols-2 pt-12'>
+                  <div className='absolute bottom-0 w-full grid grid-cols-2 pt-12'>
                     <div className="flex ">
                       <div className=' text-light-gray'>
                         Go Back
                       </div>
                     </div>
                     <div className=' flex justify-end'>
-                      <button className=' bg-marine-blue text-white px-8 py-2 rounded-[6px]' onClick={(e) => handleNext(e, 2)}>Next</button>
+                      <button className=' hover:bg-pastel-blue duration-300 bg-marine-blue text-white px-8 py-2 rounded-[6px]' onClick={(e) => handleNext(e, 2)}>Next</button>
                     </div>
 
                   </div>
@@ -387,51 +391,51 @@ const [key,setKey] = useState([
                 <h1 className='text-left text-[26px] font-semibold text-marine-blue'>Pick add-ons</h1>
                 <p className=' text-light-gray text-[18px] text-left pt-1'>Add-ons help enchance your gaming experience</p>
 
-                <div className=' py-6'>
-             
-                {packages?.map((v, i) => {
-                  return (
-                    <div className={`border border-light-gray rounded-[6px] py-4 cursor-pointer mb-4`}>
-                      <label className={` cursor-pointer `}>
-                        <div className=' grid grid-cols-6'>
-                          <div className=' my-4'>
-                            <input type="checkbox"  className='largerCheckbox' onClick={() => handlePackage(v, i)} id={v?.name} name={v?.name} defaultChecked={v?.value} value={v?.value} />
-                          </div>
-                          <div className=' col-span-4 pt-1'>
-                            <div className=' text-left text-marine-blue font-semibold'>
-                              {v?.name}
-                            </div>
-                            <div className=' text-light-gray  text-left'>
-                              {v?.des}
-                            </div>
-                          </div>
-                          
-                          <div className=' text-purplish-blue my-4'>
-                            {add ? `${v?.price_year}` : `${v?.price_month}`}
+                <div className=' py-12'>
 
-                            {/* {v?.price_month} */}
+                  {packages?.map((v, i) => {
+                    return (
+                      <div className={`border border-light-gray rounded-[6px] py-4 cursor-pointer mb-4`}>
+                        <label className={` cursor-pointer `}>
+                          <div className=' grid grid-cols-6'>
+                            <div className=' my-4'>
+                              <input type="checkbox" className='largerCheckbox' onClick={() => handlePackage(v, i)} id={v?.name} name={v?.name} defaultChecked={v?.value} value={v?.value} />
+                            </div>
+                            <div className=' col-span-4 pt-1'>
+                              <div className=' text-left text-marine-blue font-semibold'>
+                                {v?.name}
+                              </div>
+                              <div className=' text-light-gray  text-left'>
+                                {v?.des}
+                              </div>
+                            </div>
+
+                            <div className=' text-purplish-blue my-4'>
+                              {add ? `${v?.price_year}` : `${v?.price_month}`}
+
+                              {/* {v?.price_month} */}
+                            </div>
                           </div>
-                        </div>
-                        <div>
-                        </div>
-                      </label>
-                    </div>
-                  )
-                })}
-                     </div>
+                          <div>
+                          </div>
+                        </label>
+                      </div>
+                    )
+                  })}
+                </div>
 
 
                 <p className='text-strawberry-red heading justify-end'>  {error.package}</p>
 
 
-                <div className=' grid grid-cols-2'>
+                <div className='absolute bottom-0 w-full  grid grid-cols-2'>
                   <div className="flex ">
                     <div className=' text-light-gray'>
                       Go Back
                     </div>
                   </div>
                   <div className=' flex justify-end'>
-                    <button className=' bg-marine-blue text-white px-8 py-2 rounded-[6px]' onClick={(e) => handleNext(e, 3)}>Next</button>
+                    <button className=' hover:bg-pastel-blue duration-300 bg-marine-blue text-white px-8 py-2 rounded-[6px]' onClick={(e) => handleNext(e, 3)}>Next</button>
                   </div>
                 </div>
               </div> : null}
@@ -440,7 +444,7 @@ const [key,setKey] = useState([
                 <h1 className='text-left text-[26px] font-semibold text-marine-blue'>Finishing up</h1>
                 <p className=' text-light-gray text-[18px] text-left pt-1'>Double-check everything looks OK before confirming</p>
 
-                <div className=' grid grid-cols-2 py-4'>
+                <div className=' grid grid-cols-2 py-12 pb-8 border-bottom-grey'>
                   <div>
                     {data.plan === "pro" ? <div className='text-left text-marine-blue font-semibold'>   Pro  {data.months ? <span className='text-left text-marine-blue font-semibold'>(Yearly) </span> : <span className='text-left text-marine-blue font-semibold'> (Monthly)</span>} </div> : null}
                     {data.plan === "advanced" ? <div className='text-left text-marine-blue font-semibold'>   Advanced   {data.months ? <span className='text-left text-marine-blue font-semibold'>(Yearly) </span> : <span className='text-left text-marine-blue font-semibold'> (Monthly)</span>}</div> : null}
@@ -454,14 +458,14 @@ const [key,setKey] = useState([
 
 
 
-                <div className=' grid grid-cols-2'>
+                <div className=' grid grid-cols-2 py-4'>
                   {packages?.map((v, i) => {
                     return (
                       <>
                         <div className=' py-2'>
                           {v?.value === true ? <div className='text-left text-light-gray '>{v?.name} </div> : null}
                         </div>
-                        <div  className=' py-2'>
+                        <div className=' py-2'>
                           {v?.value === true ? <> {data.months ? <><div className='text-right text-marine-blue font-semibold'>{v?.price_year} </div></> : <><div className='text-right text-marine-blue font-semibold'>{v?.price_month} </div></>}</> : null}
                         </div>
                       </>
@@ -474,28 +478,28 @@ const [key,setKey] = useState([
 
 
                   </div>
-                  
+
                 </div>
 
                 <div className=' grid grid-cols-2 pt-4'>
-                    <div className='flex text-light-gray'>
-                      Total  {add ? <p className=' text-light-gray mx-1'> Per Year</p>:<p className=' text-light-gray mx-1'>Per Months</p>}
-                      </div>
-                    <div className='text-right text-purplish-blue text-[24px] font-semibold'>$9<sapn>{data.months ? <span>/ye</span> : <span> /mo</span>}</sapn></div>
+                  <div className='flex text-light-gray'>
+                    Total  {add ? <p className=' text-light-gray mx-1'> Per Year</p> : <p className=' text-light-gray mx-1'>Per Months</p>}
                   </div>
+                  <div className='text-right text-purplish-blue text-[24px] font-semibold'>$9<sapn>{data.months ? <span>/ye</span> : <span> /mo</span>}</sapn></div>
+                </div>
 
 
 
 
 
-                <div className=' grid grid-cols-2 pt-10'>
+                <div className='absolute bottom-0 w-full  grid grid-cols-2 pt-10'>
                   <div className="flex ">
                     <div className=' text-light-gray'>
                       Go Back
                     </div>
                   </div>
                   <div className=' flex justify-end'>
-                    <button className=' bg-marine-blue text-white px-8 py-2 rounded-[6px]' onClick={(e) => handleNext(e, 3)}>Confrom</button>
+                    <button className=' hover:bg-pastel-blue duration-300 bg-marine-blue text-white px-8 py-2 rounded-[6px]' onClick={(e) => handleNext(e, 3)}>Confirm</button>
                   </div>
                 </div>
 

@@ -1,38 +1,40 @@
 @font-face {
-    font-family: primaryFont;
-    src: url(../font/Ubuntu-Regular.ttf);
+  font-family: primaryFont;
+  src: url(../font/Ubuntu-Regular.ttf);
 }
 
 @font-face {
-    font-family: fontBold;
-    src: url(../font/Ubuntu-Medium.ttf);
+  font-family: fontBold;
+  src: url(../font/Ubuntu-Medium.ttf);
 }
 
-*{
-    font-family: primaryFont;
+* {
+  font-family: primaryFont;
 }
-.heading{
-    font-family: fontBold;
+.heading {
+  font-family: fontBold;
 }
-html,body,#root,.App{
-    height: 100%;
+html,
+body,
+#root,
+.App {
+  height: 100%;
 }
-.container{
-    width: 1366px;
-    margin: 0px auto;
-}
-
-textarea:focus, input:focus{
-    outline: none;
-    border:1px solid hsl(243, 100%, 62%);
-}
-.error-border{
-    border:1px solid hsl(354, 84%, 57%);
-
+.container {
+  width: 1366px;
 }
 
-input[type="radio"]{
-    visibility:hidden;
+textarea:focus,
+input:focus {
+  outline: none;
+  border: 1px solid hsl(243, 100%, 62%);
+}
+.error-border {
+  border: 1px solid hsl(354, 84%, 57%);
+}
+
+input[type="radio"] {
+  visibility: hidden;
 }
 
 /* Chrome, Safari, Edge, Opera */
@@ -43,10 +45,14 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type=number] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
-input.largerCheckbox{
-    width: 18px;
-    height: 18px;
+input.largerCheckbox {
+  width: 18px;
+  height: 18px;
+}
+
+.border-bottom-grey {
+  border-bottom: 1px solid #ccc;
 }
